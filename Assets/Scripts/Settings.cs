@@ -5,9 +5,15 @@ namespace Neuroevolution
 {
 	public static class Settings
 	{
-		public static float crossoverFactor = .5f;
-		public static float mutationRate = .1f;
-		public static float mutationMax = .5f;
+		public static readonly int inputNeurons = 1;
+		public static readonly int[] hiddenNeurons = { 1 };
+		public static readonly int ouputNeurons = 1;
+
+		public static readonly int populationSize = 50;
+
+		public static readonly float crossoverFactor = .5f;
+		public static readonly float mutationRate = .1f;
+		public static readonly float mutationMax = .5f;
 
 
 		public static float randomClamped()

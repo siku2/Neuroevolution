@@ -1,8 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 
-namespace Neuroevolution.Generations
+namespace Neuroevolution.NeuralNetwork
 {
 	public class Generation
 	{
@@ -44,6 +43,13 @@ namespace Neuroevolution.Generations
 			}
 
 			return offspring;
+		}
+
+
+		public NetworkSaveState[] breedNextGenerationNetworks()
+		{
+			//TODO yes, u gotta do dis
+			return new NetworkSaveState[0];
 		}
 	}
 }

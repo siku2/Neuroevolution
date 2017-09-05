@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 
 namespace Neuroevolution.NeuralNetwork
@@ -79,6 +78,36 @@ namespace Neuroevolution.NeuralNetwork
 				
 			Layer outputLayer = new Layer(index, outputLayerNeurons, prevNeurons);
 			layers[index] = outputLayer;
+		}
+
+
+		public Network(NetworkSaveState save)
+		{
+			int prevNeurons = 0;
+			int index = 0;
+			int indexWeights = 0;
+
+			layers = new Layer[save.neuronsPerLayer.Count];
+
+			for(int i = 0; i < save.neuronsPerLayer.Count; i++)
+			{
+				Layer layer = new Layer(index, save.neuronsPerLayer[i], prevNeurons);
+
+				for(int j = 0; j < layer.neurons.Length; j++)
+				{
+					for(int k = 0; k < layer.neurons[j].weights.Length; k++)
+					{
+						layer.neurons[j].weights[k] = save.weights[indexWeights];
+
+						indexWeights++;
+					}
+				}
+
+				prevNeurons = save.neuronsPerLayer[i];
+				index++;
+
+				layers[i] = layer;
+			}
 		}
 
 
