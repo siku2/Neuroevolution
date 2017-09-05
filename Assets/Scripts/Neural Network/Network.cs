@@ -59,7 +59,7 @@ namespace Neuroevolution.NeuralNetwork
 		{
 			int index = 0;
 			int prevNeurons = 0;
-			layers = new Layer[inputLayerNeurons + hiddenLayers.Length + outputLayerNeurons];
+			layers = new Layer[hiddenLayers.Length + 2];
 
 			Layer inputLayer = new Layer(index, inputLayerNeurons, prevNeurons);
 			layers[index] = inputLayer;
@@ -72,7 +72,7 @@ namespace Neuroevolution.NeuralNetwork
 				Layer layer = new Layer(index, hiddenLayers[i], prevNeurons);
 				layers[index] = layer;
 
-				prevNeurons = inputLayerNeurons;
+				prevNeurons = hiddenLayers[i];
 				index++;
 			}
 				

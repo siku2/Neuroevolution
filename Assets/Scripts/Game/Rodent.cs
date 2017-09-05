@@ -5,18 +5,41 @@ namespace Neuroevolution.Game
 {
 	public class Rodent : MonoBehaviour
 	{
-		public bool alive;
+		int _index;
+
+
+		public int index {
+			get
+			{
+				return _index;
+			}
+			set
+			{
+				_index = value;
+				transform.name = "Rodent " + _index;
+			}
+		}
+
+
+		public bool alive = true;
+
+
+		public float[] getInput()
+		{
+			return new float[] {0, 0, 0 ,0};
+		}
 
 
 		public void reset()
 		{
 			alive = true;
-			//TODO reset...
+			gameObject.SetActive(true);
 		}
 
 
 		public void jump()
 		{
+			Debug.Log(index + " jumped");
 			//TODO jump...
 		}
 	}

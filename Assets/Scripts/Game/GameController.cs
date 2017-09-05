@@ -9,6 +9,10 @@ namespace Neuroevolution.Game
 		[SerializeField] Rodent rodentPrefab;
 		[SerializeField] Transform rodentParent;
 		[SerializeField] float moveSpeedModifier;
+		[Range(0f, 1f)]
+		[SerializeField] float jumpTrigger;
+
+		[Header("UI")]
 		[SerializeField] Text aliveDisplay;
 		[SerializeField] Text fitnessDisplay;
 
@@ -16,12 +20,14 @@ namespace Neuroevolution.Game
 		NeuralNetwork.Network[] generationNetworks;
 		Rodent[] rodents;
 
-		float currentY = 0f;
+		float currentX = 0f;
 
 		int generation = 0;
 		int stillAlive;
 		int currentFitness = 0;
 		int highestFitness = 0;
+
+		bool runningSimulation = false;
 
 
 		void Start()
@@ -32,11 +38,25 @@ namespace Neuroevolution.Game
 
 		void Update()
 		{
-			currentY += Time.deltaTime * moveSpeedModifier;
+			if(!runningSimulation)
+			{
+				return;
+			}
+
+			currentX += Time.deltaTime * moveSpeedModifier;
 
 			for(int i = 0; i < rodents.Length; i++)
 			{
-				
+				Vector3 oldPos = rodents[i].transform.position;
+				rodents[i].transform.position = new Vector3(currentX, oldPos.y, oldPos.z);
+
+				float[] inputs = rodents[i].getInput();
+				float[] result = generationNetworks[i].compute(inputs);
+
+				if(result[0] > jumpTrigger)
+				{
+					rodents[i].jump();
+				}
 			}
 
 			UpdateUITexts();
@@ -58,7 +78,7 @@ namespace Neuroevolution.Game
 			for(int i = 0; i < amount; i++)
 			{
 				Rodent newRodent = Instantiate<Rodent>(rodentPrefab, Vector3.zero, Quaternion.identity, rodentParent);
-				newRodent.transform.name = "Rodent " + i;
+				newRodent.index = i;
 
 				rodents[i] = newRodent;
 			}
@@ -69,7 +89,8 @@ namespace Neuroevolution.Game
 
 		void StartGen()
 		{
-			Debug.Log("Getting next generation");
+			Debug.Log("Starting Generation " + generation);
+
 			generationNetworks = nnManager.nextGenerationNetworks();
 
 			if(rodents == null)
@@ -84,6 +105,8 @@ namespace Neuroevolution.Game
 
 			stillAlive = rodents.Length;
 			generation++;
+
+			runningSimulation = true;
 		}
 	}
 }

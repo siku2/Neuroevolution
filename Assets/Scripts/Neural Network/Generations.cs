@@ -6,8 +6,6 @@ namespace Neuroevolution.NeuralNetwork
 	public class Generations
 	{
 		public List<Generation> generations = new List<Generation>();
-		//FIXME unneeded
-		public Generation currentGeneration = new Generation();
 
 
 		public Generation lastGeneration {

@@ -204,7 +204,8 @@ MonoBehaviour:
   rodentPrefab: {fileID: 114456755753031800, guid: 6cfbf897153b6b142be7951584fa3739,
     type: 2}
   rodentParent: {fileID: 1558692386}
-  moveSpeedModifier: 1.5
+  moveSpeedModifier: 3.5
+  jumpTrigger: 0.5
   aliveDisplay: {fileID: 1556306724}
   fitnessDisplay: {fileID: 1733468739}
 --- !u!4 &546510353
@@ -366,7 +367,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4246145849444716, guid: 6cfbf897153b6b142be7951584fa3739, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 0.09
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4246145849444716, guid: 6cfbf897153b6b142be7951584fa3739, type: 2}
       propertyPath: m_LocalPosition.y
