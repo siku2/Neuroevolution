@@ -6,6 +6,7 @@ namespace Neuroevolution.Game
 {
 	public class GameController : MonoBehaviour
 	{
+		[SerializeField] CameraManager cameraManager;
 		[SerializeField] Rodent rodentPrefab;
 		[SerializeField] Transform rodentParent;
 		[SerializeField] Transform floorParent;
@@ -126,6 +127,8 @@ namespace Neuroevolution.Game
 			}
 
 			Debug.Log("Instantiated the Rodents");
+
+			cameraManager.target = rodents[0].transform;
 		}
 
 

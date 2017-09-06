@@ -458,13 +458,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 086ddfdefeb360843b4601e5c9ad337e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cameraManager: {fileID: 1377496960}
   rodentPrefab: {fileID: 845664840}
   rodentParent: {fileID: 1558692386}
   floorParent: {fileID: 1394716947}
   moveSpeedModifier: 3.5
   zSpacing: 0.275
   jumpTrigger: 0.5
-  timeScale: 1
+  timeScale: 2
   aliveDisplay: {fileID: 1556306724}
   fitnessDisplay: {fileID: 1733468739}
   generationDisplay: {fileID: 1342257940}
@@ -966,6 +967,7 @@ GameObject:
   - component: {fileID: 1377496958}
   - component: {fileID: 1377496957}
   - component: {fileID: 1377496956}
+  - component: {fileID: 1377496960}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1037,6 +1039,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 20, y: 15, z: 0}
+--- !u!114 &1377496960
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1377496955}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fd4aabb6d43de240a16aeb40a0d8dd7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  cameraOffset: {x: -3, y: 8, z: -12}
 --- !u!1 &1394716946
 GameObject:
   m_ObjectHideFlags: 0

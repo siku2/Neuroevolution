@@ -75,11 +75,8 @@ namespace Neuroevolution.NeuralNetwork
 
 			for(int i = 0; i < randomAmount; i++)
 			{
-				if(nextNetworks.Count < Settings.populationSize)
-				{
-					Network net = new Network(Settings.inputNeurons, Settings.hiddenNeurons, Settings.ouputNeurons);
-					nextNetworks.Add(net.saveState());
-				}
+				Network net = new Network(Settings.inputNeurons, Settings.hiddenNeurons, Settings.ouputNeurons);
+				nextNetworks.Add(net.saveState());
 			}
 
 			int breederIndex = 0;

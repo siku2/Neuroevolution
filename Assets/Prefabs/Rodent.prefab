@@ -192,5 +192,5 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   jumpForce: 10
-  rayScanRange: 5
+  rayScanRange: 8
   alive: 1

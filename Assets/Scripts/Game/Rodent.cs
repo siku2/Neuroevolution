@@ -38,12 +38,12 @@ namespace Neuroevolution.Game
 
 			float obstacleInput = 2 * hit.distance / rayScanRange - 1;
 
-			if(index == 0)
-			{
-				Debug.Log("<color=blue>DS:" + obstacleInput + "</color>");
-			}
+//			if(index == 0)
+//			{
+//				Debug.Log("<color=blue>DS:" + obstacleInput + "</color>");
+//			}
 
-			return new float[] { obstacleInput };
+			return new float[] { obstacleInput, transform.position.y / 5f };
 		}
 
 
