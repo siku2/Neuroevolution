@@ -8,19 +8,21 @@ namespace Neuroevolution.Game
 	{
 		[SerializeField] Rodent rodentPrefab;
 		[SerializeField] Transform rodentParent;
+		[SerializeField] Transform floorParent;
 		[SerializeField] float moveSpeedModifier;
+		[SerializeField] float zSpacing;
 		[Range(0f, 1f)]
 		[SerializeField] float jumpTrigger;
+		[SerializeField] float timeScale;
 
 		[Header("UI")]
 		[SerializeField] Text aliveDisplay;
 		[SerializeField] Text fitnessDisplay;
+		[SerializeField] Text generationDisplay;
 
 		NeuralNetwork.Manager nnManager = new NeuralNetwork.Manager();
 		NeuralNetwork.Network[] generationNetworks;
 		Rodent[] rodents;
-
-		float currentX = 0f;
 
 		int generation = 0;
 		int stillAlive;
@@ -32,34 +34,67 @@ namespace Neuroevolution.Game
 
 		void Start()
 		{
+			Time.timeScale = timeScale;
 			StartGen();
 		}
 
 
 		void Update()
 		{
+			UpdateUITexts();
+		}
+
+
+		void FixedUpdate()
+		{
 			if(!runningSimulation)
 			{
 				return;
 			}
 
-			currentX += Time.deltaTime * moveSpeedModifier;
+			float highestCurrentX = 0;
 
 			for(int i = 0; i < rodents.Length; i++)
 			{
-				Vector3 oldPos = rodents[i].transform.position;
-				rodents[i].transform.position = new Vector3(currentX, oldPos.y, oldPos.z);
-
-				float[] inputs = rodents[i].getInput();
-				float[] result = generationNetworks[i].compute(inputs);
-
-				if(result[0] > jumpTrigger)
+				if(rodents[i].alive)
 				{
-					rodents[i].jump();
+					float beforeX = rodents[i].transform.position.x;
+					highestCurrentX = (beforeX > highestCurrentX) ? beforeX : highestCurrentX;
+
+					rodents[i].move(Time.fixedDeltaTime * moveSpeedModifier);
+
+					float[] inputs = rodents[i].getInput();
+					float[] result = generationNetworks[i].compute(inputs);
+
+					if(i == 0)
+					{
+						Debug.Log("<color=green>NN: " + string.Join(", ", System.Array.ConvertAll(result, val => val.ToString())) + "</color>");
+					}
+
+					if(result[0] > jumpTrigger)
+					{
+						rodents[i].jump();
+					}
+
+					if(!rodents[i].alive)
+					{
+						Debug.Log(i + " died");
+						nnManager.score(generationNetworks[i], beforeX);
+						stillAlive--;
+					}
 				}
 			}
 
-			UpdateUITexts();
+			currentFitness = (int) highestCurrentX;
+			highestFitness = (currentFitness > highestFitness) ? currentFitness : highestFitness;
+
+			if(stillAlive <= 0)
+			{
+				Debug.Log("ALL DEAD!");
+				runningSimulation = false;
+
+				StartGen();
+			}
 		}
 
 
@@ -75,10 +110,17 @@ namespace Neuroevolution.Game
 			rodents = new Rodent[amount];
 			Debug.Log("Instantiating " + amount + " Rodents");
 
+			Vector3 oldScale = floorParent.transform.localScale;
+			floorParent.transform.localScale = new Vector3(oldScale.x, oldScale.y, amount * zSpacing);
+			Vector3 oldPos = floorParent.transform.position;
+			floorParent.transform.position = new Vector3(oldPos.x, oldPos.y, .5f * amount * zSpacing);
+
 			for(int i = 0; i < amount; i++)
 			{
 				Rodent newRodent = Instantiate<Rodent>(rodentPrefab, Vector3.zero, Quaternion.identity, rodentParent);
 				newRodent.index = i;
+
+				newRodent.transform.position = new Vector3(0f, 0f, i * zSpacing);
 
 				rodents[i] = newRodent;
 			}
@@ -102,6 +144,8 @@ namespace Neuroevolution.Game
 			{
 				rodents[i].reset();
 			}
+
+			generationDisplay.text = generation.ToString();
 
 			stillAlive = rodents.Length;
 			generation++;

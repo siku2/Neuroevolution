@@ -13,7 +13,7 @@ namespace Neuroevolution
 
 		public static bool chance(float chance)
 		{
-			return (chance <= Random.value);
+			return (Random.value <= chance);
 		}
 	}
 }

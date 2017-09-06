@@ -5,14 +5,12 @@ namespace Neuroevolution.NeuralNetwork
 {
 	public class Neuron
 	{
-		public float value;
+		public float value = 0f;
 		public float[] weights;
 
 
 		public Neuron(int inputAmount)
 		{
-			value = 0;
-
 			weights = new float[inputAmount];
 
 			for(int i = 0; i < inputAmount; i++)
@@ -43,6 +41,8 @@ namespace Neuroevolution.NeuralNetwork
 		}
 	}
 
+
+	[System.Serializable]
 	public class NetworkSaveState
 	{
 		public List<int> neuronsPerLayer = new List<int>();
@@ -166,10 +166,8 @@ namespace Neuroevolution.NeuralNetwork
 		{
 			for(int i = 0; i < inputValues.Length; i++)
 			{
-				if(layers[0] != null && layers[0].neurons[i] != null)
-				{
-					layers[0].neurons[i].value = inputValues[i];
-				}
+//				UnityEngine.Debug.Log(string.Format("Putting value {0} into neuron {1}", inputValues[i], i));
+				layers[0].neurons[i].value = inputValues[i];
 			}
 
 			Layer prevLayer = layers[0];
@@ -182,9 +180,11 @@ namespace Neuroevolution.NeuralNetwork
 
 					for(int k = 0; k < prevLayer.neurons.Length; k++)
 					{
+//						UnityEngine.Debug.Log(string.Format("l{0}n{1} weight: {2}", i, j, layers[i].neurons[j].weights[k]));
 						total += prevLayer.neurons[k].value * layers[i].neurons[j].weights[k];
 					}
 
+//					UnityEngine.Debug.Log(string.Format("l{0}n{1} total: {2} value: {3}", i, j, total, Settings.activation(total)));
 					layers[i].neurons[j].value = Settings.activation(total);
 				}
 
