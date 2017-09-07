@@ -7,6 +7,7 @@ namespace Neuroevolution.Game
 	public class GameController : MonoBehaviour
 	{
 		[SerializeField] CameraManager cameraManager;
+		[SerializeField] MapGenerator mapGenerator;
 		[SerializeField] Rodent rodentPrefab;
 		[SerializeField] Transform rodentParent;
 		[SerializeField] Transform floorParent;
@@ -24,6 +25,22 @@ namespace Neuroevolution.Game
 		NeuralNetwork.Manager nnManager = new NeuralNetwork.Manager();
 		NeuralNetwork.Network[] generationNetworks;
 		Rodent[] rodents;
+
+		Rodent _cameraTarget;
+
+
+		Rodent cameraTarget {
+			get
+			{
+				return _cameraTarget;
+			}
+			set
+			{
+				_cameraTarget = value;
+				cameraManager.target = _cameraTarget.transform;
+			}
+		}
+
 
 		int generation = 0;
 		int stillAlive;
@@ -59,6 +76,11 @@ namespace Neuroevolution.Game
 			{
 				if(rodents[i].alive)
 				{
+					if(!cameraTarget.alive)
+					{
+						cameraTarget = rodents[i];
+					}
+
 					float beforeX = rodents[i].transform.position.x;
 					highestCurrentX = (beforeX > highestCurrentX) ? beforeX : highestCurrentX;
 
@@ -67,10 +89,10 @@ namespace Neuroevolution.Game
 					float[] inputs = rodents[i].getInput();
 					float[] result = generationNetworks[i].compute(inputs);
 
-					if(i == 0)
-					{
-						Debug.Log("<color=green>NN: " + string.Join(", ", System.Array.ConvertAll(result, val => val.ToString())) + "</color>");
-					}
+//					if(i == 0)
+//					{
+//						Debug.Log("<color=green>NN: " + string.Join(", ", System.Array.ConvertAll(result, val => val.ToString())) + "</color>");
+//					}
 
 					if(result[0] > jumpTrigger)
 					{
@@ -79,12 +101,14 @@ namespace Neuroevolution.Game
 
 					if(!rodents[i].alive)
 					{
-						Debug.Log(i + " died");
+//						Debug.Log(i + " died");
 						nnManager.score(generationNetworks[i], beforeX);
 						stillAlive--;
 					}
 				}
 			}
+
+			mapGenerator.currentPosition = highestCurrentX;
 
 			currentFitness = (int) highestCurrentX;
 			highestFitness = (currentFitness > highestFitness) ? currentFitness : highestFitness;
@@ -128,7 +152,7 @@ namespace Neuroevolution.Game
 
 			Debug.Log("Instantiated the Rodents");
 
-			cameraManager.target = rodents[0].transform;
+			cameraTarget = rodents[0];
 		}
 
 
@@ -142,6 +166,8 @@ namespace Neuroevolution.Game
 			{
 				InstantiateRodents(generationNetworks.Length);
 			}
+
+			mapGenerator.reset();
 
 			for(int i = 0; i < generationNetworks.Length; i++)
 			{

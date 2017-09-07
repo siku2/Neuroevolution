@@ -62,7 +62,6 @@ namespace Neuroevolution.NeuralNetwork
 				return false;
 			}
 
-			//TODO maybe some more checks
 			lastGeneration.addGenome(genome);
 			return true;
 		}

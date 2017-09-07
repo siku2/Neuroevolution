@@ -191,6 +191,7 @@ MonoBehaviour:
   floorLayer:
     serializedVersion: 2
     m_Bits: 256
-  jumpForce: 10
-  rayScanRange: 8
+  minJumpDelay: 0.75
+  jumpForce: 20
+  rayScanRange: 12
   alive: 1
