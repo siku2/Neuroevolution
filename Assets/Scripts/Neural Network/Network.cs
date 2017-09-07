@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System.IO;
+using System.Collections.Generic;
+using System.Runtime.Serialization.Formatters.Binary;
 
 
 namespace Neuroevolution.NeuralNetwork
@@ -47,6 +49,19 @@ namespace Neuroevolution.NeuralNetwork
 	{
 		public List<int> neuronsPerLayer = new List<int>();
 		public List<float> weights = new List<float>();
+
+
+		public NetworkSaveState deepCopy()
+		{
+			using(var ms = new MemoryStream())
+			{
+				var formatter = new BinaryFormatter();
+				formatter.Serialize(ms, this);
+				ms.Position = 0;
+
+				return (NetworkSaveState) formatter.Deserialize(ms);
+			}
+		}
 	}
 
 

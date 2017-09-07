@@ -5,7 +5,7 @@ namespace Neuroevolution.Game
 {
 	public class MapGenerator : MonoBehaviour
 	{
-		public int seed;
+		[HideInInspector] public int seed;
 
 		[Tooltip("x: how far away from the currentPosition an object has to be in order to be deleted, y: how far ahead to build the map")]
 		[SerializeField] Vector2 mapRange;
@@ -20,6 +20,7 @@ namespace Neuroevolution.Game
 		[SerializeField] float persistence;
 		[Range(0f, 1f)]
 		[SerializeField] float spawnTrigger;
+		[SerializeField] float posScale;
 
 		Pool<Transform> obstaclePool;
 		float _currentPosition;
@@ -67,7 +68,7 @@ namespace Neuroevolution.Game
 
 		void PlaceObstacles()
 		{
-			float value = Utils.octavePerlinNoise(farRight + seed, octaves, persistence);
+			float value = Utils.octavePerlinNoise(farRight * posScale + seed, octaves, persistence);
 			if(value >= spawnTrigger)
 			{
 				Transform newObstacle = obstaclePool.GrabItem();
@@ -103,7 +104,7 @@ namespace Neuroevolution.Game
 			{
 				_currentPosition = value;
 
-
+				#if UNITY_EDITOR
 				Vector3 topLeft = new Vector3(_currentPosition - mapRange.x, lineLength / 2);
 				Vector3 bottomLeft = new Vector3(_currentPosition - mapRange.x, -lineLength / 2);
 
@@ -112,6 +113,7 @@ namespace Neuroevolution.Game
 
 				Debug.DrawLine(topLeft, bottomLeft);
 				Debug.DrawLine(topRight, bottomRight);
+				#endif
 
 				PlaceObstacles();
 				RemoveOldObstacles();

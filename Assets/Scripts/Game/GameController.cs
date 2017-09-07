@@ -1,26 +1,25 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 
 
 namespace Neuroevolution.Game
 {
 	public class GameController : MonoBehaviour
 	{
+		[Header("Manager")]
 		[SerializeField] CameraManager cameraManager;
 		[SerializeField] MapGenerator mapGenerator;
+		[SerializeField] UIManager uiManager;
+
+		[Header("Game Settings")]
 		[SerializeField] Rodent rodentPrefab;
 		[SerializeField] Transform rodentParent;
-		[SerializeField] Transform floorParent;
+		[SerializeField] Transform worldParent;
 		[SerializeField] float moveSpeedModifier;
 		[SerializeField] float zSpacing;
 		[Range(0f, 1f)]
 		[SerializeField] float jumpTrigger;
+		[Range(0f, 50f)]
 		[SerializeField] float timeScale;
-
-		[Header("UI")]
-		[SerializeField] Text aliveDisplay;
-		[SerializeField] Text fitnessDisplay;
-		[SerializeField] Text generationDisplay;
 
 		NeuralNetwork.Manager nnManager = new NeuralNetwork.Manager();
 		NeuralNetwork.Network[] generationNetworks;
@@ -50,16 +49,15 @@ namespace Neuroevolution.Game
 		bool runningSimulation = false;
 
 
-		void Start()
+		void OnValidate()
 		{
 			Time.timeScale = timeScale;
-			StartGen();
 		}
 
 
-		void Update()
+		void Start()
 		{
-			UpdateUITexts();
+			StartGen();
 		}
 
 
@@ -113,6 +111,10 @@ namespace Neuroevolution.Game
 			currentFitness = (int) highestCurrentX;
 			highestFitness = (currentFitness > highestFitness) ? currentFitness : highestFitness;
 
+			uiManager.fitness = Mathf.RoundToInt(currentFitness);
+			uiManager.highestFitness = Mathf.RoundToInt(highestFitness);
+			uiManager.alive = stillAlive;
+
 			if(stillAlive <= 0)
 			{
 				Debug.Log("ALL DEAD!");
@@ -123,22 +125,15 @@ namespace Neuroevolution.Game
 		}
 
 
-		void UpdateUITexts()
-		{
-			aliveDisplay.text = string.Format("{0}/{1}", stillAlive, rodents.Length);
-			fitnessDisplay.text = string.Format("{0}/{1}", currentFitness, highestFitness);
-		}
-
-
 		void InstantiateRodents(int amount)
 		{
 			rodents = new Rodent[amount];
 			Debug.Log("Instantiating " + amount + " Rodents");
 
-			Vector3 oldScale = floorParent.transform.localScale;
-			floorParent.transform.localScale = new Vector3(oldScale.x, oldScale.y, amount * zSpacing);
-			Vector3 oldPos = floorParent.transform.position;
-			floorParent.transform.position = new Vector3(oldPos.x, oldPos.y, .5f * amount * zSpacing);
+			Vector3 oldScale = worldParent.transform.localScale;
+			worldParent.transform.localScale = new Vector3(oldScale.x, oldScale.y, amount * zSpacing);
+			Vector3 oldPos = worldParent.transform.position;
+			worldParent.transform.position = new Vector3(oldPos.x, oldPos.y, .5f * amount * zSpacing);
 
 			for(int i = 0; i < amount; i++)
 			{
@@ -160,6 +155,8 @@ namespace Neuroevolution.Game
 		{
 			Debug.Log("Starting Generation " + generation);
 
+			uiManager.generation = generation + 1;
+
 			generationNetworks = nnManager.nextGenerationNetworks();
 
 			if(rodents == null)
@@ -168,13 +165,12 @@ namespace Neuroevolution.Game
 			}
 
 			mapGenerator.reset();
+			mapGenerator.seed = Random.Range(-10000, 10000);
 
 			for(int i = 0; i < generationNetworks.Length; i++)
 			{
 				rodents[i].reset();
 			}
-
-			generationDisplay.text = generation.ToString();
 
 			stillAlive = rodents.Length;
 			generation++;

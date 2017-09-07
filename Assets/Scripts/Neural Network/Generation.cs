@@ -25,27 +25,27 @@ namespace Neuroevolution.NeuralNetwork
 		}
 
 
-		public Genome[] breed(Genome parent1, Genome parent2, int children)
+		public NetworkSaveState[] breed(NetworkSaveState parent1, NetworkSaveState parent2, int children)
 		{
-			Genome[] offspring = new Genome[children];
+			NetworkSaveState[] offspring = new NetworkSaveState[children];
 
 			for(int childIndex = 0; childIndex < children; childIndex++)
 			{
-				Genome child = parent1.deepCopy();
+				NetworkSaveState child = parent1.deepCopy();
 
-				for(int i = 0; i < parent2.network.weights.Count; i++)
+				for(int i = 0; i < parent2.weights.Count; i++)
 				{
 					if(Utils.chance(Settings.crossoverFactor))
 					{
-						child.network.weights[i] = parent2.network.weights[i];
+						child.weights[i] = parent2.weights[i];
 					}
 				}
 
-				for(int i = 0; i < child.network.weights.Count; i++)
+				for(int i = 0; i < child.weights.Count; i++)
 				{
 					if(Utils.chance(Settings.mutationRate))
 					{
-						child.network.weights[i] += Utils.rangeAroundZero(Settings.mutationMax);
+						child.weights[i] += Utils.rangeAroundZero(Settings.mutationMax);
 					}
 				}
 
@@ -85,13 +85,13 @@ namespace Neuroevolution.NeuralNetwork
 			{
 				for(int i = 0; i < breederIndex; i++)
 				{
-					Genome[] children = breed(genomes[i], genomes[breederIndex], Settings.childAmount);
+					NetworkSaveState[] children = breed(genomes[i].network, genomes[breederIndex].network, Settings.childAmount);
 
 					for(int j = 0; j < children.Length; j++)
 					{
 						if(nextNetworks.Count < Settings.populationSize)
 						{
-							nextNetworks.Add(children[j].network);
+							nextNetworks.Add(children[j]);
 						}
 						else
 						{

@@ -9,7 +9,7 @@ namespace Neuroevolution
 		public static readonly int[] hiddenNeurons = {2};
 		public static readonly int ouputNeurons = 1;
 
-		public static readonly int populationSize = 50;
+		public static readonly int populationSize = 60;
 		public static readonly int childAmount = 1;
 
 		public static readonly float crossoverFactor = .5f;
