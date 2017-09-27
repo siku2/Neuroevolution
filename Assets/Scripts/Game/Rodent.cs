@@ -11,6 +11,7 @@ namespace Neuroevolution.Game
 		[SerializeField] LayerMask floorLayer;
 		[SerializeField] float minJumpDelay;
 		[SerializeField] float jumpForce;
+		[SerializeField] float yInputDivider;
 		[SerializeField] float rayScanRange;
 
 		float nextJumpTime;
@@ -45,11 +46,40 @@ namespace Neuroevolution.Game
 			}
 			#endif
 
-			RaycastHit2D hit = Physics2D.Raycast(startPos, Vector2.right, rayScanRange, obstacle.value);
+			RaycastHit2D[] hits = Physics2D.RaycastAll(startPos, Vector2.right, rayScanRange, obstacle.value);
 
-			float obstacleInput = 2 * hit.distance / rayScanRange - 1;
+			float[] inputs = new float[Settings.inputNeurons];
 
-			return new float[] { obstacleInput, transform.position.y / jumpForce };
+			for(int i = 0; i < Settings.inputNeurons - 1; i++)
+			{
+				if(i < hits.Length)
+				{
+					float obstacleValue = hits[i].distance / rayScanRange;
+					inputs[i] = 1 - 2 * obstacleValue;
+				}
+				else
+				{
+					inputs[i] = -1;
+				}
+
+//				#if UNITY_EDITOR
+//				if(index == 0)
+//				{
+//					Debug.Log(string.Format("Obstacle {0} = {1}", i, inputs[i]));
+//				}
+//				#endif
+			}
+
+			inputs[inputs.Length - 1] = transform.position.y / yInputDivider;
+
+//			#if UNITY_EDITOR
+//			if(index == 0)
+//			{
+//				Debug.Log(string.Format("Height = {0}", inputs[inputs.Length - 1]));
+//			}
+//			#endif
+				
+			return inputs;
 		}
 
 

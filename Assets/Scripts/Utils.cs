@@ -99,6 +99,7 @@ namespace Neuroevolution
 		{
 			if(freeItems.Count == 0)
 			{
+				//TODO if there's no createItem function, return false
 				T newItem = createItem();
 				AddItem(newItem, false);
 				

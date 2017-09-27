@@ -51,7 +51,7 @@ namespace Neuroevolution.Game
 		}
 
 
-		void Start()
+		void Awake()
 		{
 			obstaclePool = new Pool<Transform>(spawnObstacle);
 			floor.localScale = new Vector3(mapRange.x + mapRange.y, floor.localScale.y, floor.localScale.z);

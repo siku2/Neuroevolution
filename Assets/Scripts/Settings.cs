@@ -5,8 +5,8 @@ namespace Neuroevolution
 {
 	public static class Settings
 	{
-		public static readonly int inputNeurons = 2;
-		public static readonly int[] hiddenNeurons = {2};
+		public static readonly int inputNeurons = 3;
+		public static readonly int[] hiddenNeurons = { 2 };
 		public static readonly int ouputNeurons = 1;
 
 		public static readonly int populationSize = 60;

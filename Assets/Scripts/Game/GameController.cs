@@ -131,7 +131,7 @@ namespace Neuroevolution.Game
 			Debug.Log("Instantiating " + amount + " Rodents");
 
 			Vector3 oldScale = worldParent.transform.localScale;
-			worldParent.transform.localScale = new Vector3(oldScale.x, oldScale.y, amount * zSpacing);
+			worldParent.transform.localScale = new Vector3(oldScale.x, oldScale.y, (amount + 1) * zSpacing);
 			Vector3 oldPos = worldParent.transform.position;
 			worldParent.transform.position = new Vector3(oldPos.x, oldPos.y, .5f * amount * zSpacing);
 
