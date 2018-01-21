@@ -63,7 +63,7 @@ namespace Neuroevolution.NeuralNetwork
 			int survivorAmount = System.Math.Max((int) (Settings.leaveBestPercentage * Settings.populationSize), 1);
 			int randomAmount = (int) (Settings.newcomerPercentage * Settings.populationSize);
 
-//			UnityEngine.Debug.Log(string.Format("Next generation with {0} from the last gen and {1} random ones", survivorAmount, randomAmount));
+			UnityEngine.Debug.Log(string.Format("Next generation with {0} from the last gen and {1} random ones", survivorAmount, randomAmount));
 
 			for(int i = 0; i < survivorAmount; i++)
 			{

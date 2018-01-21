@@ -626,7 +626,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seed: 0
-  mapRange: {x: 20, y: 45}
+  mapRange: {x: 30, y: 30}
   obstacleParent: {fileID: 534833011}
   obstaclePrefab: {fileID: 4688114272485624, guid: 83d451479547c4e42a42c539b632192d,
     type: 2}
@@ -954,7 +954,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2080961496}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -877.7284, y: 541.09607, z: 0}
+  m_LocalPosition: {x: -851.81635, y: 557.87756, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1733468738}
@@ -1028,6 +1028,16 @@ Prefab:
     - target: {fileID: 4505154826714524, guid: 6cfbf897153b6b142be7951584fa3739, type: 2}
       propertyPath: m_RootOrder
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114167043745778856, guid: 6cfbf897153b6b142be7951584fa3739,
+        type: 2}
+      propertyPath: downView.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114167043745778856, guid: 6cfbf897153b6b142be7951584fa3739,
+        type: 2}
+      propertyPath: downView.y
+      value: -0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6cfbf897153b6b142be7951584fa3739, type: 2}
@@ -1114,8 +1124,8 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2140068502}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 346.5, y: 218, z: 0}
-  m_LocalScale: {x: 0.38172212, y: 0.38172212, z: 0.38172212}
+  m_LocalPosition: {x: 462, y: 308, z: 0}
+  m_LocalScale: {x: 0.5239186, y: 0.5239186, z: 0.5239186}
   m_Children:
   - {fileID: 2080961497}
   - {fileID: 242690653}

@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 
+using System.IO;
+
 
 namespace Neuroevolution.Game
 {
@@ -24,6 +26,7 @@ namespace Neuroevolution.Game
 		NeuralNetwork.Manager nnManager = new NeuralNetwork.Manager();
 		NeuralNetwork.Network[] generationNetworks;
 		Rodent[] rodents;
+		StreamWriter file;
 
 		Rodent _cameraTarget;
 
@@ -57,7 +60,13 @@ namespace Neuroevolution.Game
 
 		void Start()
 		{
+			Application.runInBackground = true;
+			file = File.CreateText("out.txt");
 			StartGen();
+		}
+
+		public void OnApplicationQuit() {
+			file.Close();
 		}
 
 
@@ -120,6 +129,7 @@ namespace Neuroevolution.Game
 				Debug.Log("ALL DEAD!");
 				runningSimulation = false;
 
+				file.WriteLine(string.Format("{0}: {1}", generation, currentFitness));
 				StartGen();
 			}
 		}

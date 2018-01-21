@@ -9,6 +9,7 @@ namespace Neuroevolution.Game
 		[SerializeField] MeshRenderer meshRenderer;
 		[SerializeField] LayerMask obstacle;
 		[SerializeField] LayerMask floorLayer;
+		[SerializeField] Vector2 downView;
 		[SerializeField] float minJumpDelay;
 		[SerializeField] float jumpForce;
 		[SerializeField] float yInputDivider;
@@ -37,14 +38,17 @@ namespace Neuroevolution.Game
 		public float[] getInput()
 		{
 			//TODO don't hard-code height
-			Vector2 startPos = new Vector2(transform.position.x, .5f);
+			Vector2 startPos = new Vector2(transform.position.x, transform.position.y);
 
 			#if UNITY_EDITOR
 			if(index == 0)
 			{
 				Debug.DrawRay(startPos, Vector2.right * rayScanRange, Color.blue);
+				Debug.DrawRay(startPos, downView.normalized * rayScanRange, Color.green);
 			}
 			#endif
+
+			RaycastHit2D hitDown = Physics2D.Raycast(startPos, downView, rayScanRange, obstacle.value);
 
 			RaycastHit2D[] hits = Physics2D.RaycastAll(startPos, Vector2.right, rayScanRange, obstacle.value);
 
@@ -54,12 +58,12 @@ namespace Neuroevolution.Game
 			{
 				if(i < hits.Length)
 				{
-					float obstacleValue = hits[i].distance / rayScanRange;
-					inputs[i] = 1 - 2 * obstacleValue;
+					float obstacleValue = 1 / hits[i].distance;
+					inputs[i] = obstacleValue;
 				}
 				else
 				{
-					inputs[i] = -1;
+					inputs[i] = 0;
 				}
 
 //				#if UNITY_EDITOR
@@ -70,12 +74,19 @@ namespace Neuroevolution.Game
 //				#endif
 			}
 
-			inputs[inputs.Length - 1] = transform.position.y / yInputDivider;
+			if(hitDown.collider != null)
+			{
+				inputs[inputs.Length - 1] = 1 / hitDown.distance;
+			}
+			else
+			{
+				inputs[inputs.Length - 1] = 0;
+			}
 
 //			#if UNITY_EDITOR
 //			if(index == 0)
 //			{
-//				Debug.Log(string.Format("Height = {0}", inputs[inputs.Length - 1]));
+//				Debug.Log(string.Format("Down = {0}", inputs[inputs.Length - 1]));
 //			}
 //			#endif
 				
